@@ -30,6 +30,23 @@ async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
+
+    const usersCollections = client.db("HilfAlFudul").collection("users");
+    const volunteerCollections = client
+      .db("HilfAlFudul")
+      .collection("volunteer");
+
+    app.post("/users", async (req, res) => {
+      const user = req.body;
+      const result = await usersCollections.insertOne(user);
+      res.send(result);
+    });
+
+    app.get("/users", async (req, res) => {
+      const result = await usersCollections.find().toArray();
+      res.send(result);
+    });
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
