@@ -1,9 +1,9 @@
-require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
+require("dotenv").config();
 const { MongoClient, ServerApiVersion } = require("mongodb");
 const app = express();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 8000;
 
 // Middle ware
 app.use(
@@ -31,10 +31,7 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
 
-    const usersCollections = client.db("HilfAlFudul").collection("users");
-    const volunteerCollections = client
-      .db("HilfAlFudul")
-      .collection("volunteer");
+    const usersCollections = client.db("Donation").collection("users");
 
     app.post("/users", async (req, res) => {
       const user = req.body;
@@ -54,7 +51,7 @@ async function run() {
     );
   } finally {
     // Ensures that the client will close when you finish/error
-    await client.close();
+    // await client.close();
   }
 }
 run().catch(console.dir);
