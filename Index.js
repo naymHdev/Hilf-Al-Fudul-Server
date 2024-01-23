@@ -32,7 +32,21 @@ async function run() {
     await client.connect();
 
     const usersCollections = client.db("Donation").collection("users");
+    const foundersCollection = client.db("Donation").collection("founders");
 
+    // founders routes
+    app.post("/founders", async (req, res) => {
+      const person = req.body;
+      const result = await foundersCollection.insertOne(person);
+      res.send(result);
+    });
+
+    app.get("/founders", async (req, res) => {
+      const result = await foundersCollection.find().toArray();
+      res.send(result);
+    });
+
+    // users collection routes
     app.post("/users", async (req, res) => {
       const user = req.body;
       const result = await usersCollections.insertOne(user);
