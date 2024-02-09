@@ -8,7 +8,7 @@ const port = process.env.PORT || 8000;
 // Middle ware
 app.use(
   cors({
-    origin: ["http://localhost:5173"],
+    origin: ["http://localhost:5173", "https://hilf-al-fudul.netlify.app"],
     credentials: true,
   })
 );
@@ -29,7 +29,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    // await client.connect();
 
     const usersCollections = client.db("Donation").collection("users");
     const foundersCollection = client.db("Donation").collection("founders");
