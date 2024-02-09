@@ -47,6 +47,13 @@ async function run() {
       res.send(result);
     });
 
+     app.delete("/joinVolunteer/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await volunteersCollection.deleteOne(query);
+      res.send(result);
+    });
+
     // founders routes
     app.post("/founders", async (req, res) => {
       const person = req.body;
