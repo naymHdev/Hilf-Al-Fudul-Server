@@ -1,6 +1,6 @@
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-require("dotenv").config();
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const app = express();
 const port = process.env.PORT || 8000;
@@ -15,7 +15,7 @@ app.use(
 app.use(express.json());
 
 const uri = `mongodb+srv://${process.env.APP_ID}:${process.env.APP_PASS}@firstpractice.poejscf.mongodb.net/?retryWrites=true&w=majority`;
-console.log(uri);
+// console.log(uri);
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -33,6 +33,19 @@ async function run() {
 
     const usersCollections = client.db("Donation").collection("users");
     const foundersCollection = client.db("Donation").collection("founders");
+    const volunteersCollection = client.db("Donation").collection("volunteers");
+
+    ///// joinVolunteer Collection \\\\\
+    app.post("/joinVolunteer", async (req, res) => {
+      const volunteer = req.body;
+      const result = await volunteersCollection.insertOne(volunteer);
+      res.send(result);
+    });
+
+    app.get("/joinVolunteer", async (req, res) => {
+      const result = await volunteersCollection.find().toArray();
+      res.send(result);
+    });
 
     // founders routes
     app.post("/founders", async (req, res) => {
