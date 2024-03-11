@@ -47,7 +47,7 @@ async function run() {
       res.send(result);
     });
 
-     app.delete("/joinVolunteer/:id", async (req, res) => {
+    app.delete("/joinVolunteer/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await volunteersCollection.deleteOne(query);
@@ -74,9 +74,20 @@ async function run() {
     });
 
     // users collection routes
-    app.post("/users", async (req, res) => {
+    app.put("/users/:email", async (req, res) => {
+      const email = req.params.email;
       const user = req.body;
-      const result = await usersCollections.insertOne(user);
+      const query = { email: email };
+      const options = { upsert: true };
+      const isExist = await usersCollections.findOne(query);
+      if (isExist) return res.send(isExist);
+      const result = await usersCollections.updateOne(
+        query,
+        {
+          $set: { ...user, timestamp: Date.now() },
+        },
+        options
+      );
       res.send(result);
     });
 
