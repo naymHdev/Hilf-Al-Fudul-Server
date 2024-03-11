@@ -34,6 +34,13 @@ async function run() {
     const usersCollections = client.db("Donation").collection("users");
     const foundersCollection = client.db("Donation").collection("founders");
     const volunteersCollection = client.db("Donation").collection("volunteers");
+    const eventsCollection = client.db("Donation").collection("events");
+
+    ///// Events Collection \\\\\
+    app.get("/events", async (req, res) => {
+      const result = await eventsCollection.find().toArray();
+      res.send(result);
+    });
 
     ///// joinVolunteer Collection \\\\\
     app.post("/joinVolunteer", async (req, res) => {
@@ -74,20 +81,9 @@ async function run() {
     });
 
     // users collection routes
-    app.put("/users/:email", async (req, res) => {
-      const email = req.params.email;
+    app.post("/users", async (req, res) => {
       const user = req.body;
-      const query = { email: email };
-      const options = { upsert: true };
-      const isExist = await usersCollections.findOne(query);
-      if (isExist) return res.send(isExist);
-      const result = await usersCollections.updateOne(
-        query,
-        {
-          $set: { ...user, timestamp: Date.now() },
-        },
-        options
-      );
+      const result = await usersCollections.insertOne(user);
       res.send(result);
     });
 
