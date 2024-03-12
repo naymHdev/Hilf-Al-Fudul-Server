@@ -39,11 +39,23 @@ async function run() {
     const commentsCollection = client.db("Donation").collection("comments");
 
     ///// Events Collection \\\\\
+    app.delete("/comments/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await commentsCollection.deleteOne(query);
+      res.send(result);
+    });
     app.post("/comments", async (req, res) => {
       const comment = req.body;
       const result = await commentsCollection.insertOne(comment);
       res.send(result);
     });
+
+    app.get("/comments", async (req, res) => {
+      const result = await commentsCollection.find().toArray();
+      res.send(result);
+    });
+
     ///// Events Collection \\\\\
     app.get("/donations", async (req, res) => {
       const result = await donationsCollection.find().toArray();
