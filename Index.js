@@ -36,7 +36,14 @@ async function run() {
     const volunteersCollection = client.db("Donation").collection("volunteers");
     const eventsCollection = client.db("Donation").collection("events");
     const donationsCollection = client.db("Donation").collection("donations");
+    const commentsCollection = client.db("Donation").collection("comments");
 
+    ///// Events Collection \\\\\
+    app.post("/comments", async (req, res) => {
+      const comment = req.body;
+      const result = await commentsCollection.insertOne(comment);
+      res.send(result);
+    });
     ///// Events Collection \\\\\
     app.get("/donations", async (req, res) => {
       const result = await donationsCollection.find().toArray();
