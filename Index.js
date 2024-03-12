@@ -35,6 +35,13 @@ async function run() {
     const foundersCollection = client.db("Donation").collection("founders");
     const volunteersCollection = client.db("Donation").collection("volunteers");
     const eventsCollection = client.db("Donation").collection("events");
+    const donationsCollection = client.db("Donation").collection("donations");
+
+    ///// Events Collection \\\\\
+    app.get("/donations", async (req, res) => {
+      const result = await donationsCollection.find().toArray();
+      res.send(result);
+    });
 
     ///// Events Collection \\\\\
     app.get("/events", async (req, res) => {
