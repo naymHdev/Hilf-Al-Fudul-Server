@@ -37,6 +37,21 @@ async function run() {
     const eventsCollection = client.db("Donation").collection("events");
     const donationsCollection = client.db("Donation").collection("donations");
     const commentsCollection = client.db("Donation").collection("comments");
+    const contactMessageCollection = client
+      .db("Donation")
+      .collection("contactMessage");
+
+    ///// Contact Message Collection \\\\\
+    app.post("/contactMessage", async (req, res) => {
+      const message = req.body;
+      const result = await contactMessageCollection.insertOne(message);
+      res.send(result);
+    });
+
+    app.get("/contactMessage", async (req, res) => {
+      const result = await contactMessageCollection.find().toArray();
+      res.send(result);
+    });
 
     ///// Events Collection \\\\\
     app.delete("/comments/:id", async (req, res) => {
