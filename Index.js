@@ -16,7 +16,6 @@ app.use(express.json());
 
 const uri = `mongodb+srv://${process.env.APP_ID}:${process.env.APP_PASS}@firstpractice.poejscf.mongodb.net/?retryWrites=true&w=majority`;
 
-
 const client = new MongoClient(uri, {
   serverApi: {
     version: ServerApiVersion.v1,
@@ -39,6 +38,13 @@ async function run() {
     const contactMessageCollection = client
       .db("Donation")
       .collection("contactMessage");
+    const blogsCollection = client.db("Donation").collection("blogs");
+
+    /// Blogs Collections \\
+    app.get("/blogs", async (req, res) => {
+      const result = await blogsCollection.find().toArray();
+      res.send(result);
+    });
 
     ///// Contact Message Collection \\\\\
     app.post("/contactMessage", async (req, res) => {
