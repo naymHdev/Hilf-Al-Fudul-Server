@@ -1,17 +1,17 @@
-require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
+require("dotenv").config();
 const app = express();
 const port = process.env.PORT || 8000;
 
 // Middle ware
-app.use(
-  cors({
-    origin: ["http://localhost:5173", "https://hilf-al-fudul.netlify.app"],
-    credentials: true,
-  })
-);
+const corsOptions = {
+  origin: ["http://localhost:5173", "https://hilf-al-fudul.netlify.app"],
+  credentials: true,
+  optionSuccessStatus: 200,
+};
+app.use(cors(corsOptions));
 app.use(express.json());
 
 const uri = `mongodb+srv://${process.env.APP_ID}:${process.env.APP_PASS}@firstpractice.poejscf.mongodb.net/?retryWrites=true&w=majority`;
@@ -39,6 +39,19 @@ async function run() {
       .db("Donation")
       .collection("contactMessage");
     const blogsCollection = client.db("Donation").collection("blogs");
+    const galleryCollection = client.db("Donation").collection("gallery");
+
+    /// Images collection
+    app.get("/images", async (req, res) => {
+      const result = await galleryCollection.find().toArray();
+      res.send(result);
+    });
+
+    app.post("/images", async (req, res) => {
+      const image = req.body;
+      const result = await galleryCollection.insertOne(image);
+      res.send(result);
+    });
 
     /// Blogs Collections \\
     app.get("/blogs", async (req, res) => {
