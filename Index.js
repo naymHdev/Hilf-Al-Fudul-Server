@@ -7,7 +7,11 @@ const port = process.env.PORT || 8000;
 
 // Middle ware
 const corsOptions = {
-  origin: ["http://localhost:5173", "https://hilf-al-fudul.netlify.app"],
+  origin: [
+    "http://localhost:5173",
+    "https://hilf-al-fudul.netlify.app",
+    "https://hilful-fujul-client.vercel.app",
+  ],
   credentials: true,
   optionSuccessStatus: 200,
 };
