@@ -44,6 +44,26 @@ async function run() {
       .collection("contactMessage");
     const blogsCollection = client.db("Donation").collection("blogs");
     const galleryCollection = client.db("Donation").collection("gallery");
+    const projectsCollections = client.db("Donation").collection("project");
+
+    // All Projects Collection routes
+    app.get("/api/projects", async (req, res) => {
+      try {
+        const result = await projectsCollections.find().toArray();
+        res.send(result);
+      } catch (error) {
+        console.log("Get not find projects", error);
+      }
+    });
+    app.post("/api/projects", async (req, res) => {
+      try {
+        const projectId = req.body;
+        const result = await projectsCollections.insertOne(projectId);
+        res.send(result);
+      } catch (error) {
+        console.error("project data post failed!", error);
+      }
+    });
 
     /// Images collection
     app.get("/images", async (req, res) => {
