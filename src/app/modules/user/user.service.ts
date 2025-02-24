@@ -3,6 +3,7 @@ import { IUser, UserRole } from './user.interface';
 import User from './user.model';
 import AppError from '../../errors/appError';
 import mongoose from 'mongoose';
+import { AuthService } from '../auth/auth.service';
 
 const registerUser = async (userData: IUser) => {
   const session = await mongoose.startSession();
@@ -32,7 +33,12 @@ const registerUser = async (userData: IUser) => {
     const createdUser = await user.save({ session });
 
     await session.commitTransaction();
-    return createdUser;
+
+    return await AuthService.loginUser({
+      email: createdUser.email,
+      password: userData.password,
+      clientInfo: userData.clientInfo,
+    });
   } catch (error) {
     console.log(error);
     if (session.inTransaction()) {
