@@ -1,13 +1,15 @@
+/* eslint-disable @typescript-eslint/no-this-alias */
 import { Schema } from 'mongoose';
 import bcrypt from 'bcrypt';
 import { IUser, UserModel, UserRole } from './user.interface';
 import configs from '../../configs';
-import AppError from '../../errors/AppError';
 import { StatusCodes } from 'http-status-codes';
 import mongoose from 'mongoose';
+import AppError from '../../errors/appError';
 
 const userSchema = new Schema<IUser, UserModel>(
   {
+    name: { type: String, required: true, trim: true },
     email: {
       type: String,
       required: true,
@@ -16,7 +18,6 @@ const userSchema = new Schema<IUser, UserModel>(
       trim: true,
     },
     password: { type: String, required: true, minlength: 6 },
-    name: { type: String, required: true, trim: true },
     role: {
       type: String,
       enum: [UserRole.ADMIN, UserRole.USER],

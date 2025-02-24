@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { Document, Model } from 'mongoose';
 
 // Enum for User Roles
