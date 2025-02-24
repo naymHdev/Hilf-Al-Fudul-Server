@@ -4,6 +4,8 @@ import User from './user.model';
 import AppError from '../../errors/appError';
 import mongoose from 'mongoose';
 import { AuthService } from '../auth/auth.service';
+import QueryBuilder from '../../builder/QueryBuilder';
+import { UserSearchableFields } from './user.constant';
 
 const registerUser = async (userData: IUser) => {
   const session = await mongoose.startSession();
@@ -50,6 +52,23 @@ const registerUser = async (userData: IUser) => {
   }
 };
 
+const getAllUser = async (query: Record<string, unknown>) => {
+  const UserQuery = new QueryBuilder(User.find(), query)
+    .search(UserSearchableFields)
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
+
+  const result = await UserQuery.modelQuery;
+  const meta = await UserQuery.countTotal();
+  return {
+    result,
+    meta,
+  };
+};
+
 export const UserServices = {
   registerUser,
+  getAllUser,
 };

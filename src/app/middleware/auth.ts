@@ -3,7 +3,7 @@ import { UserRole } from '../modules/user/user.interface';
 import { NextFunction, Request, Response } from 'express';
 import catchAsync from '../utils/catchAsync';
 import configs from '../configs';
-import AppError from '../errors/AppError';
+import AppError from '../errors/appError';
 import { StatusCodes } from 'http-status-codes';
 import User from '../modules/user/user.model';
 
@@ -23,6 +23,8 @@ const auth = (...requiredRoles: UserRole[]) => {
         token,
         configs.jwt_access_secret as string,
       ) as JwtPayload;
+
+      // console.log('decoded', decoded);
 
       const { role, email } = decoded;
 
